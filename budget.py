@@ -15,7 +15,7 @@ class Category:
 
         # Instance Variables
         self.category_str = category.name  #
-        self.ledger = []
+        ledger = []
         # Constant Variables
         AMT = "amount"
         DESCR = "description"
@@ -25,7 +25,7 @@ class Category:
 
         This is the sum of the amounts in the ledger."""
 
-        return sum([each["amount"] for each in self.ledger])
+        return sum([each["amount"] for each in ledger])
 
     def check_funds(amt_f):
         """Checks if there are enough funds to withdraw.
@@ -40,8 +40,8 @@ class Category:
     def post(amt_f, descr_str="", change_sign=False):
         """Appends a transaction to the ledger.
 
-        Args:            amt_f: The amount of money that is deposited or withdrawn.
-
+        Args:
+            amt_f: The amount of money that is deposited or withdrawn.
             descr_str: A short description of the transaction.
             change_sign: if set to true, then the amount is converted to a negative number."""
 
@@ -50,7 +50,7 @@ class Category:
         else:
             dict = {AMT: round(amt_f, 2), DESCR: descr_str}
 
-        self.ledger.append(dict)
+        ledger.append(dict)
 
     def deposit(amt_f, descr_str=""):
         """Deposits an amount to the category's ledger.
@@ -60,7 +60,7 @@ class Category:
             descr_str: A short description of the transaction."""
 
         assert amt_f >= 0
-        post(amt_f, descr_str)
+        self.post(amt_f, descr_str)
 
     def withdraw(amt_f, descr_str=""):
         """Withdraws an amount to the category's ledger.
@@ -70,16 +70,18 @@ class Category:
             descr_str: A short description of the transaction."""
 
         assert amt_f >= 0
-        if get_balance() == False:
-            post(amt_f, descr_str, True)
+        if self.get_balance() == False:
+            self.post(amt_f, descr_str, True)
+            return True
 
-    def transfer(amt_f, category_str):
+    def transfer(amt_f, category_):
         """If there are enough funds in self, the function will withdraw from 'self' and deposit it into the destination category."""
 
         assert amt_f >= 0
         if get_balance() == False:
-            withdraw(amt_f, f"")
-            category_str.deposit(amt_f, f"")
+            self.withdraw(amt_f, f"Transfer to {category}")
+            category.deposit(amt_f, f"Transfer from {self.category_str")
+            return True
 
     def __str__():
         """Prints a formatted title, ledger list, and a total."""
