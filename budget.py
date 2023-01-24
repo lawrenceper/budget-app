@@ -20,16 +20,6 @@ class Category:
         AMT = "amount"
         DESCR = "description"
 
-    def change_sign(number):
-        """Returns the changed sign of a number (integer or float).
-
-        E.G. 42 becomes -42."""
-
-        try:
-            return number - (number * 2)
-        except:
-            raise ValueError("Error: not a number.")
-
     def get_balance():
         """Gets the balance of the category's ledger.
 
@@ -43,19 +33,23 @@ class Category:
         Returns true if amt_f is grater than the amount in self"""
 
         if get_balance() > amt_f:
-            return False
-        else:
             return True
+        else:
+            return False
 
-    def post(amt_f, descr_str=""):
+    def post(amt_f, descr_str="", change_sign=False):
         """Appends a transaction to the ledger.
 
-        Args:
-            amt_f: The amount of money that is deposited or withdrawn.
+        Args:            amt_f: The amount of money that is deposited or withdrawn.
 
-            descr_str: A short description of the transaction."""
+            descr_str: A short description of the transaction.
+            change_sign: if set to true, then the amount is converted to a negative number."""
 
-        dict = {AMT: amt_f, DESCR: descr_str}
+        if change_sign:
+            dict = {AMT: round(amt_f - (amt_f * 2), 2), DESCR: descr_str}
+        else:
+            dict = {AMT: round(amt_f, 2), DESCR: descr_str}
+
         self.ledger.append(dict)
 
     def deposit(amt_f, descr_str=""):
@@ -76,18 +70,16 @@ class Category:
             descr_str: A short description of the transaction."""
 
         assert amt_f >= 0
-        if get_balance():
-            amt_changed = change_sign(amt_f)
-            post(amt_changed, descr_str)
+        if get_balance() == False:
+            post(amt_f, descr_str, True)
 
-    def transfer(amt_f, category):
+    def transfer(amt_f, category_str):
         """If there are enough funds in self, the function will withdraw from 'self' and deposit it into the destination category."""
 
         assert amt_f >= 0
-        if get_balance():
-            amt_changed = change_sign(amt_f)
-            post(amt_changed, descr_str)
-            # Note to self: this class method is not finish. Google 'How to access another class object from the current  class object in Python?"
+        if get_balance() == False:
+            withdraw(amt_f, f"")
+            category_str.deposit(amt_f, f"")
 
     def __str__():
         """Prints a formatted title, ledger list, and a total."""
