@@ -1,0 +1,15 @@
+Python 3.9.2 (default, Feb 28 2021, 17:03:44) 
+[GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> python.el: native completion setup loaded
+>>> d2 = {'a':2, 'd': 'two'}
+>>> d3 = {'a':3, 'd': 'three'}
+>>> d3 = {'a':3, 'd': 'three'}
+>>> l = [d1, d2, d3]
+>>> l
+[{'a': 1, 'd': 'one'}, {'a': 2, 'd': 'two'}, {'a': 3, 'd': 'three'}]
+>>> sum([ t['a'] for t in l])
+[1, 2, 3]
+>>> sum([ t['a'] for t in l])
+6
+>>> 
