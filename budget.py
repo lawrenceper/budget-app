@@ -12,24 +12,40 @@ class Category:
             category_str: the name of the category.
 
         Returns: None"""
+
         # Instance Variables
         self.category_str = category.name  #
-        ledger = []
+        self.ledger = []
         # Constant Variables
         AMT = "amount"
         DESCR = "description"
 
-    def check_funds(amt_f):
-        """This function will check if there are enough funds to withdraw.
+    def change_sign(number):
+        """Returns the changed sign of a number (integer or float).
 
-        Returns true if amt_f is grater than the amount in self"""
-        return False
+        E.G. 42 becomes -42."""
+
+        try:
+            return number - (number * 2)
+        except:
+            raise ValueError("Error: not a number.")
 
     def get_balance():
         """Gets the balance of the category's ledger.
 
         This is the sum of the amounts in the ledger."""
-        return 0
+
+        return sum([each["amount"] for each in self.ledger])
+
+    def check_funds(amt_f):
+        """Checks if there are enough funds to withdraw.
+
+        Returns true if amt_f is grater than the amount in self"""
+
+        if get_balance() > amt_f:
+            return False
+        else:
+            return True
 
     def post(amt_f, descr_str=""):
         """Appends a transaction to the ledger.
@@ -38,8 +54,9 @@ class Category:
             amt_f: The amount of money that is deposited or withdrawn.
 
             descr_str: A short description of the transaction."""
+
         dict = {AMT: amt_f, DESCR: descr_str}
-        ledger.append(dict)
+        self.ledger.append(dict)
 
     def deposit(amt_f, descr_str=""):
         """Deposits an amount to the category's ledger.
@@ -47,6 +64,7 @@ class Category:
         Args:
             amt_f: The amount of money to be deposited.
             descr_str: A short description of the transaction."""
+
         assert amt_f >= 0
         post(amt_f, descr_str)
 
@@ -56,11 +74,20 @@ class Category:
         Args:
             amt_f: The amount of money to be withdrawn.
             descr_str: A short description of the transaction."""
-        pass
+
+        assert amt_f >= 0
+        if get_balance():
+            amt_changed = change_sign(amt_f)
+            post(amt_changed, descr_str)
 
     def transfer(amt_f, category):
         """If there are enough funds in self, the function will withdraw from 'self' and deposit it into the destination category."""
-        pass
+
+        assert amt_f >= 0
+        if get_balance():
+            amt_changed = change_sign(amt_f)
+            post(amt_changed, descr_str)
+            # Note to self: this class method is not finish. Google 'How to access another class object from the current  class object in Python?"
 
     def __str__():
         """Prints a formatted title, ledger list, and a total."""
