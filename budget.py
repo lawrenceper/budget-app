@@ -85,8 +85,11 @@ class Category:
 
     def __str__():
         """Prints a formatted title, ledger list, and a total."""
-        return ""
-
+        return_list = []
+        return_list.append(f"{self.category:*^30")
+        for each in ledger:
+            return_list.append(f"{each[DESCR]: <23}{[AMT]: >7}")
+        return_list.append(f"""{"Total": >23}{get_balance(): >7}""")
 
 def create_spend_chart(categories):
     """Returns a propperly-formatted stack chart."""
